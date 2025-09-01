@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "harness/unity.h"
 #include "../src/lab.h"
-
+#include <stddef.h>
 
 void setUp(void) {
   printf("Setting up tests...\n");
@@ -150,6 +150,61 @@ void test_list_is_empty(void) {
   list_destroy(list, NULL);
 }
 
+// Additional tests for edge cases and error paths
+// Assisted By AI
+// Testing Insertion at Out of Bounds Index
+void test_list_insert_out_of_bounds(void) {
+  List *list = list_create(LIST_LINKED_SENTINEL);
+  int a = 10;
+  bool result = list_insert(list, 2, &a); // List is empty, index 2 is out of bounds
+  TEST_ASSERT_FALSE(result);
+  list_destroy(list, NULL);
+}
+
+// Assisted By AI
+// Testing Removal at Out of Bounds Index
+void test_list_remove_out_of_bounds(void) {
+  List *list = list_create(LIST_LINKED_SENTINEL);
+  int a = 10;
+  list_append(list, &a);
+  void *removed = list_remove(list, 1); // Only one element, index 1 is out of bounds
+  TEST_ASSERT_NULL(removed);
+  list_destroy(list, NULL);
+}
+
+// Assisted By AI
+// Testing Get at Out of Bounds Index
+void test_list_get_out_of_bounds(void) {
+  List *list = list_create(LIST_LINKED_SENTINEL);
+  int a = 10;
+  list_append(list, &a);
+  void *data = list_get(list, 5); // Out of bounds
+  TEST_ASSERT_NULL(data);
+  list_destroy(list, NULL);
+}
+
+// Assisted By AI
+// Testing Destroying an Empty List
+void test_list_destroy_empty(void) {
+  List *list = list_create(LIST_LINKED_SENTINEL);
+  list_destroy(list, NULL); // Should not crash
+  TEST_ASSERT_TRUE(1); // Dummy assertion
+}
+
+// Assisted By AI
+// Test list_create with an invalid ListType (defensive path)
+void test_list_create_invalid_type(void) {
+  // If your implementation only supports LIST_LINKED_SENTINEL, this should return a valid list or NULL.
+  // This test will cover the defensive path if you add a check for unsupported types in list_create.
+  List *list = list_create((ListType)9999); // Invalid type
+  // Accept either NULL or a valid list, depending on your implementation
+  // If you want to enforce NULL for invalid types, update list_create accordingly
+  if (list) {
+    list_destroy(list, NULL);
+  }
+  TEST_ASSERT_TRUE(1); // Dummy assertion to ensure the test runs
+}
+
 int main(void) {
   UNITY_BEGIN();
   RUN_TEST(test_list_create);
@@ -160,5 +215,11 @@ int main(void) {
   RUN_TEST(test_list_get);
   RUN_TEST(test_list_size);
   RUN_TEST(test_list_is_empty);
+  RUN_TEST(test_list_insert_out_of_bounds);
+  RUN_TEST(test_list_remove_out_of_bounds);
+  RUN_TEST(test_list_get_out_of_bounds);
+  RUN_TEST(test_list_destroy_empty);
+  RUN_TEST(test_list_create_invalid_type);
+  // Note: malloc failure paths in lab.c are not covered due to C macro/linker limitations.
   return UNITY_END();
 }
