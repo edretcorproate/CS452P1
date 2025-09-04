@@ -32,10 +32,14 @@ List *list_create(ListType type) {
 	 */
 
     List *list = malloc(sizeof(List));
+	/* LCOV_EXCL_START */
     if (!list) return NULL;
+	/* LCOV_EXCL_STOP */
 
     ListNode *sentinel = malloc(sizeof(ListNode));
+	/* LCOV_EXCL_START */
     if (!sentinel) { free(list); return NULL; }
+	/* LCOV_EXCL_STOP */
 
     sentinel->data = NULL;
 
@@ -92,9 +96,11 @@ bool list_append(List *list, void *data) {
 	 */
 
   ListNode *new_node = malloc(sizeof(ListNode));
+  /* LCOV_EXCL_START */
   if (!new_node) {
     return false;
   }
+  /* LCOV_EXCL_STOP */
 
   new_node->data = data;
 
@@ -138,9 +144,11 @@ bool list_insert(List *list, size_t index, void *data) {
   }
 
   ListNode *new_node = malloc(sizeof(ListNode));
+  /* LCOV_EXCL_START */
   if (!new_node) {
       return false; // Allocation failed
   }
+  /* LCOV_EXCL_STOP */
 
   new_node->data = data;
   new_node->next = NULL; // Will be set properly in the next step
