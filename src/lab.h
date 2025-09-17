@@ -4,6 +4,9 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+// Comparison function pointer type: returns <0, 0, >0 like strcmp
+typedef int (*CompareFunc)(const void *, const void *);
+
 /**
  * @file lab.h
  * @brief Header file for a generic list data structure supporting multiple implementations.
@@ -87,5 +90,20 @@ size_t list_size(const List *list);
  * @return true if the list is empty, false otherwise.
  */
 bool list_is_empty(const List *list);
+
+// Sorts the list in-place from start to end-1 using the given compare function
+void sort(List *list, size_t start, size_t end, CompareFunc cmp);
+
+// Merges two lists into a new sorted list using the compare function
+List *merge(const List *list1, const List *list2, CompareFunc cmp);
+
+// Compares two int pointers for descending order (10,9,8,...)
+int compare_int(const void *a, const void *b);
+
+// Compares two string pointers for lexicographical order
+int compare_str(const void *a, const void *b);
+
+// Returns true if the list is sorted according to cmp
+bool is_sorted(const List *list, CompareFunc cmp);
 
 #endif // LAB_H

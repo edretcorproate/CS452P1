@@ -41,6 +41,7 @@ else
   $(error Invalid build type: $(BUILD))
 endif
 
+
 # Collect all source files and their object files
 SRCS := $(shell find $(SRC_DIR) -name *.c)
 OBJS := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.c.o,$(SRCS))
@@ -50,13 +51,17 @@ TEST_SRCS := $(shell find $(TEST_DIR) -name *.c)
 TEST_OBJS := $(patsubst $(TEST_DIR)/%.c,$(BUILD_DIR)/%.c.o,$(TEST_SRCS))
 TEST_DEPS := $(TEST_OBJS:.o=.d)
 
+# Remove main.o from test builds to avoid multiple definition of main
+OBJS_NO_MAIN := $(filter-out $(BUILD_DIR)/main.c.o,$(OBJS))
+
+
 # Link the object files to create the final executable
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $@ $(LDFLAGS)
 
-# Line the object files to create the test executable
-$(TEST_TARGET): $(OBJS) $(TEST_OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(TEST_OBJS) -o $@ $(LDFLAGS)
+# Link the object files to create the test executable (exclude main.o)
+$(TEST_TARGET): $(OBJS_NO_MAIN) $(TEST_OBJS)
+	$(CC) $(CFLAGS) $(OBJS_NO_MAIN) $(TEST_OBJS) -o $@ $(LDFLAGS)
 
 # Compile object files from source files
 $(BUILD_DIR)/%.c.o: $(SRC_DIR)/%.c

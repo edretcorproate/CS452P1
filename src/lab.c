@@ -1,5 +1,6 @@
 #include "lab.h"
 #include <stdlib.h>
+#include <string.h>
 
 
 // The AI came up with the plans I implemented my own code.
@@ -17,7 +18,9 @@ struct List {
 	// Add other fields as needed
 };
 
-// Assisted By AI
+/**
+* AI Use: Assisted By AI
+*/
 List *list_create(ListType type) {
   	/*
 	 * PLAN for list_Create:
@@ -31,7 +34,8 @@ List *list_create(ListType type) {
 	 * 7. Return the pointer to the new list
 	 */
 
-    List *list = malloc(sizeof(List));
+	(void)type; // Suppress unused parameter warning
+	List *list = malloc(sizeof(List));
 	/* LCOV_EXCL_START */
     if (!list) return NULL;
 	/* LCOV_EXCL_STOP */
@@ -52,7 +56,9 @@ List *list_create(ListType type) {
     return list;
 }
 
-// Assisted By AI
+/**
+* AI Use: Assisted By AI
+*/
 void list_destroy(List *list, FreeFunc free_func) {
 	/*
 	 * PLAN for list_destroy:
@@ -80,7 +86,9 @@ void list_destroy(List *list, FreeFunc free_func) {
     free(list);
 }
 
-// Assisted By AI
+/**
+* AI Use: Assisted By AI
+*/
 bool list_append(List *list, void *data) {
 	/*
 	 * PLAN for list_append:
@@ -118,7 +126,9 @@ bool list_append(List *list, void *data) {
   return true;
 }
 
-// Assisted By AI
+/**
+* AI Use: Assisted By AI
+*/
 bool list_insert(List *list, size_t index, void *data) {
 	/*
 	 * PLAN for list_insert:
@@ -166,7 +176,9 @@ bool list_insert(List *list, size_t index, void *data) {
   return true;
 }
 
-// Assisted By AI
+/**
+* AI Use: Assisted By AI
+*/
 void *list_remove(List *list, size_t index) {
 	/*
 	 * PLAN for list_remove:
@@ -205,7 +217,9 @@ void *list_remove(List *list, size_t index) {
   return data;
 }
 
-// Assisted By AI
+/**
+* AI Use: Assisted By AI
+*/
 void *list_get(const List *list, size_t index) {
 	/*
 	 * PLAN for list_get:
@@ -226,7 +240,9 @@ void *list_get(const List *list, size_t index) {
   return current->data;
 }
 
-// Assisted By AI
+/**
+* AI Use: Assisted By AI
+*/
 size_t list_size(const List *list) {
 	/*
 	 * PLAN for list_size:
@@ -235,12 +251,121 @@ size_t list_size(const List *list) {
   return list->size;  
 }
 
-// Assisted By AI
+/**
+* AI Use: Assisted By AI
+*/
 bool list_is_empty(const List *list) {
 	/*
 	 * PLAN for list_is_empty:
 	 * 1. Return true if the list's size field is 0, false otherwise.
 	 */
   return list->size == 0;
+}
+
+// Helper: get ListNode* at index (returns NULL if out of bounds)
+/**
+* AI Use: No AI
+* Helper: get ListNode* at index (returns NULL if out of bounds)
+*/
+static ListNode *get_node(List *list, size_t index) {
+	/* LCOV_EXCL_START */
+	if (index >= list->size) return NULL;
+	/* LCOV_EXCL_STOP */
+	ListNode *curr = list->head->next;
+	for (size_t i = 0; i < index; i++) curr = curr->next;
+	return curr;
+}
+
+// Sorts the list in-place from start to end-1 using the given compare function
+/**
+* AI Use: Assisted By AI
+* Sorts the list in-place from start to end-1 using the given compare function
+*/
+void sort(List *list, size_t start, size_t end, CompareFunc cmp) {
+	if (!list || start >= end || end > list->size) return;
+	// Simple bubble sort for singly linked list (not efficient, but simple)
+	for (size_t i = start; i < end; i++) {
+		ListNode *node_i = get_node(list, i);
+		for (size_t j = i + 1; j < end; j++) {
+			ListNode *node_j = get_node(list, j);
+			if (cmp(node_i->data, node_j->data) > 0) {
+				void *tmp = node_i->data;
+				node_i->data = node_j->data;
+				node_j->data = tmp;
+			}
+		}
+	}
+}
+
+// Merges two lists into a new sorted list using the compare function
+/**
+* AI Use: Assisted By AI
+* Merges two lists into a new sorted list using the compare function
+*/
+List *merge(const List *list1, const List *list2, CompareFunc cmp) {
+	/* LCOV_EXCL_START */
+	if (!list1 || !list2 || !cmp) return NULL;
+	/* LCOV_EXCL_STOP */
+	List *result = list_create(LIST_LINKED_SENTINEL);
+	/* LCOV_EXCL_START */
+	if (!result) return NULL;
+	/* LCOV_EXCL_STOP */
+	size_t i = 0, j = 0;
+	size_t n1 = list_size(list1), n2 = list_size(list2);
+	while (i < n1 && j < n2) {
+		void *d1 = list_get(list1, i);
+		void *d2 = list_get(list2, j);
+		if (cmp(d1, d2) <= 0) {
+			list_append(result, d1);
+			i++;
+		} else {
+			list_append(result, d2);
+			j++;
+		}
+	}
+	while (i < n1) {
+		list_append(result, list_get(list1, i++));
+	}
+	while (j < n2) {
+		list_append(result, list_get(list2, j++));
+	}
+	return result;
+}
+
+// Compares two int pointers for descending order (10,9,8,...)
+/**
+* AI Use: Assisted By AI
+* Compares two int pointers for descending order (10,9,8,...)
+*/
+int compare_int(const void *a, const void *b) {
+	int ia = *(const int *)a;
+	int ib = *(const int *)b;
+	return ib - ia;
+}
+
+// Compares two string pointers for lexicographical order
+/**
+* AI Use: Assisted By AI
+* Compares two string pointers for lexicographical order
+*/
+int compare_str(const void *a, const void *b) {
+	const char *sa = *(const char **)a;
+	const char *sb = *(const char **)b;
+	return strcmp(sa, sb);
+}
+
+// Returns true if the list is sorted according to cmp
+/**
+* AI Use: Assisted By AI
+* Returns true if the list is sorted according to cmp
+*/
+bool is_sorted(const List *list, CompareFunc cmp) {
+	if (!list || list->size < 2) return true;
+	for (size_t i = 1; i < list->size; i++) {
+		void *prev = list_get(list, i - 1);
+		void *curr = list_get(list, i);
+		if (cmp(prev, curr) > 0) return false;
+	}
+	return true;
 }
 
