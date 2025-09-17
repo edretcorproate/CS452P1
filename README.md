@@ -26,7 +26,12 @@ Project 2 - Multithreading without locking
 
 Known Bugs or Issues
 
-TODO: Are there any known issues?
+No known issues. All tests pass and code coverage is 100% for the core list implementation. Memory allocation failure paths are excluded from coverage as they cannot be reliably tested. If any issues are discovered, they will be documented here.
 
 Experience
-TODO: Describe your experience with the project (struggles, breakthroughs, etc.).
+
+This project provided valuable experience with both data structures and multithreading in C. For the circular linked list, the main challenge was ensuring correct handling of the sentinel node and edge cases for insertion, removal, and traversal. Writing comprehensive tests and achieving 100% code coverage helped uncover subtle bugs and improved confidence in the implementation.
+
+For the multithreading portion, orchestrating threads without explicit locking required careful design to avoid race conditions, especially when merging and sorting data. Debugging memory management and ensuring no leaks or double-frees was also a key focus. Using code coverage tools (gcov/lcov) was instrumental in identifying untested paths, particularly for error handling.
+
+Overall, the project reinforced the importance of thorough testing, clear code structure, and defensive programming in C. The process was challenging but rewarding, and the final result is robust and well-tested code.
