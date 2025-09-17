@@ -17,3 +17,16 @@ I did find it interesting on both the fact that this is circular and the fact th
 So over all the experience wasn't a horrible one or nightmarish, which most of my coding experience here at BSU can be described as. But it is all worth it for the degree that I plan on getting this semester.
 
 Fixed the coverage using gcov/lcov to ignore specific memory failure lines that cannot be easily tested.
+
+Project 2 - Multithreading without locking
+
+    Name: Emi Dretcanu
+    Email: emidretcanu@u.boisestate.edu
+    Class: 452-001
+
+Known Bugs or Issues
+
+TODO: Are there any known issues?
+
+Experience
+TODO: Describe your experience with the project (struggles, breakthroughs, etc.).
